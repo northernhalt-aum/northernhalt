@@ -2,371 +2,560 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Psyconomic</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Northern Halt — Autonomous Defence Systems</title>
+<meta name="description" content="Northern Halt — Decision superiority for contested environments. Autonomous systems and intelligence fusion, built in India.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+*{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --black:#0a0a0a;--white:#ffffff;--off:#fafaf9;
-  --g100:#ececea;--g300:#aaa;--g400:#888;--g500:#666;--g600:#444;
-  --sans:'Inter',-apple-system,sans-serif;
-  --serif:'Newsreader',Georgia,serif;
+--bg:#020203;--bg2:#070708;--panel:#0A0A0C;
+--line:#17171A;--line2:#242428;
+--white:#F4F4F2;--gray:#8A8A90;--dim:#3E3E44;--ghost:#222226;
+--red:#E03131;
+--mono:'JetBrains Mono',monospace;
+--sans:'Archivo',sans-serif;
 }
-html{scroll-behavior:smooth}
-body{font-family:var(--sans);color:var(--black);background:var(--white);
-  overflow-x:hidden;-webkit-font-smoothing:antialiased}
-a{color:inherit;text-decoration:none}
+html{scroll-behavior:smooth;overflow-x:hidden;background:var(--bg)}
+body{background:var(--bg);color:var(--white);font-family:var(--sans);overflow-x:hidden;font-weight:300;-webkit-font-smoothing:antialiased;cursor:crosshair}
+a,button{cursor:crosshair}
+::selection{background:var(--white);color:var(--bg)}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:#000}::-webkit-scrollbar-thumb{background:#2A2A2E}
+
+/* ATMOSPHERE */
+body::after{content:'';position:fixed;inset:0;z-index:998;pointer-events:none;opacity:0.035;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E")}
+body::before{content:'';position:fixed;inset:0;z-index:997;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(0,0,0,0.12) 2px 4px);opacity:0.35}
+.vignette{position:fixed;inset:0;z-index:996;pointer-events:none;background:radial-gradient(ellipse 120% 90% at 50% 40%,transparent 55%,rgba(0,0,0,0.55))}
+
+#radar{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* TOP TICKER */
+.ticker{position:fixed;top:0;left:0;right:0;z-index:120;background:var(--bg);border-bottom:1px solid var(--line);font-family:var(--mono);font-size:0.56rem;letter-spacing:2px;color:var(--dim);overflow:hidden;height:26px;display:flex;align-items:center}
+.ticker-track{display:flex;gap:4rem;white-space:nowrap;width:max-content;animation:tick 60s linear infinite;padding-left:100vw}
+.ticker-track span b{color:var(--gray);font-weight:500}
+@keyframes tick{to{transform:translateX(-50%)}}
 
 /* NAV */
-.nav{position:fixed;top:0;left:0;right:0;z-index:100;
-  background:rgba(255,255,255,0.85);backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--g100)}
-.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;
-  justify-content:space-between;padding:0 2.5rem;height:60px}
-.nav-logo{display:flex;align-items:center}
-.nav-logo svg{height:38px;width:auto}
-.nav-right{display:flex;align-items:center;gap:1.5rem}
-.nav-right a{font-size:0.825rem;font-weight:450;color:var(--g500);transition:color .15s}
-.nav-right a:hover{color:var(--black)}
+nav{position:fixed;top:26px;left:0;right:0;z-index:110;padding:1.6rem 3rem;display:flex;justify-content:space-between;align-items:center;transition:padding 0.5s,background 0.5s,border 0.5s;border-bottom:1px solid transparent}
+nav.scr{padding:0.9rem 3rem;background:rgba(2,2,3,0.82);backdrop-filter:blur(14px);border-bottom-color:var(--line)}
+.logo{height:24px;display:block}
+.nav-r{display:flex;gap:2.6rem;align-items:center}
+.nav-r a{color:var(--gray);text-decoration:none;font-family:var(--mono);font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;transition:color 0.3s;position:relative}
+.nav-r a::before{content:'[';opacity:0;margin-right:0.3em;transition:opacity 0.25s}
+.nav-r a::after{content:']';opacity:0;margin-left:0.3em;transition:opacity 0.25s}
+.nav-r a:hover{color:var(--white)}
+.nav-r a:hover::before,.nav-r a:hover::after{opacity:1}
+.nav-cta{border:1px solid var(--line2);padding:0.55rem 1.1rem;color:var(--white) !important}
+.nav-cta:hover{background:var(--white);color:var(--bg) !important}
 
 /* HERO */
-.hero{min-height:100vh;display:flex;flex-direction:column;
-  justify-content:center;align-items:center;text-align:center;
-  padding:6rem 2rem;position:relative;overflow:hidden}
-.hero-canvas{position:absolute;inset:0;z-index:0;pointer-events:none}
-.hero-content{position:relative;z-index:1}
-.hero h1{
-  font-family:var(--serif);font-size:clamp(2.4rem,5.5vw,4.5rem);
-  font-weight:400;line-height:1.12;letter-spacing:-0.025em;
-  max-width:760px;margin:0 auto 1.5rem;
-  opacity:0;animation:fadeUp .9s ease forwards .3s;
-}
-.hero-sub{
-  font-size:clamp(0.95rem,1.6vw,1.1rem);line-height:1.75;
-  color:var(--g500);max-width:520px;margin:0 auto;
-  opacity:0;animation:fadeUp .9s ease forwards .55s;
-}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:8rem 3rem 0;position:relative;z-index:1}
+.hero-meta{font-family:var(--mono);font-size:0.6rem;letter-spacing:5px;text-transform:uppercase;color:var(--gray);margin-bottom:3rem;display:flex;align-items:center;gap:1.2rem;opacity:0;animation:fade 0.8s 0.3s forwards}
+.hero-meta::before{content:'';width:36px;height:1px;background:var(--gray)}
+.hero h1{font-size:clamp(3.2rem,12.5vw,11.5rem);font-weight:680;line-height:0.86;letter-spacing:-0.035em;font-stretch:72%;text-transform:uppercase}
+.hero h1 .l{display:block;overflow:hidden}
+.hero h1 .l b{display:inline-block;font-weight:680;opacity:0;transform:translateY(112%);animation:up 1.1s cubic-bezier(0.16,1,0.3,1) forwards}
+.hero h1 .l:nth-child(1) b{animation-delay:0.5s}
+.hero h1 .l:nth-child(2) b{animation-delay:0.66s;-webkit-text-stroke:1.5px var(--white);color:transparent}
+.hero-grid{display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:end;margin-top:3.2rem}
+.hero-sub{font-size:1.08rem;color:var(--gray);max-width:480px;line-height:1.85;font-weight:300;opacity:0;animation:fade 1s 1.2s forwards}
+.hero-sub b{color:var(--white);font-weight:500}
+.hero-tel{font-family:var(--mono);font-size:0.6rem;letter-spacing:1.5px;color:var(--dim);text-align:right;line-height:2.1;opacity:0;animation:fade 1s 1.5s forwards}
+.hero-tel .vk{color:var(--gray)}
+.hero-tel .vk.hot{color:var(--red);font-weight:600}
+.hero-foot{display:flex;justify-content:space-between;align-items:end;font-family:var(--mono);font-size:0.6rem;letter-spacing:2.5px;color:var(--dim);padding:3.5rem 0 2.2rem;opacity:0;animation:fade 1s 1.7s forwards}
+.hero-foot .blink::before{content:'●';color:var(--red);margin-right:0.6rem;animation:blink 1.6s infinite}
+.hero-foot .scrolldown{display:flex;flex-direction:column;align-items:center;gap:0.5rem}
+.hero-foot .scrolldown i{display:block;width:1px;height:34px;background:linear-gradient(var(--dim),transparent);animation:drop 2s infinite}
+@keyframes drop{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+@keyframes up{to{opacity:1;transform:translateY(0)}}
+@keyframes fade{to{opacity:1}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.15}}
 
-/* WHAT WE DO */
-.what{padding:6rem 2rem;max-width:1200px;margin:0 auto}
-.what-inner{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start}
-.what-left{position:sticky;top:6rem}
-.what-eyebrow{font-size:.65rem;font-weight:600;text-transform:uppercase;
-  letter-spacing:.14em;color:var(--g400);margin-bottom:.6rem}
-.what-title{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.4rem);
-  font-weight:400;line-height:1.25;letter-spacing:-0.015em}
-.what-cards{display:flex;flex-direction:column;gap:1.5rem}
-.wc{border:1px solid var(--g100);border-radius:14px;padding:2rem;
-  transition:border-color .25s,transform .25s}
-.wc:hover{border-color:var(--g300);transform:translateY(-2px)}
-.wc h3{font-size:.95rem;font-weight:600;margin-bottom:.4rem;letter-spacing:-0.01em}
-.wc p{font-size:.85rem;line-height:1.65;color:var(--g500)}
-
-/* NUMBERS */
-.nums-bg{background:var(--black);color:var(--white);overflow:hidden;position:relative}
-.nums-wave{position:absolute;inset:0;pointer-events:none;opacity:.06}
-.nums-inner{max-width:1200px;margin:0 auto;padding:5rem 2.5rem;position:relative;z-index:1}
-.nums-head{text-align:center;margin-bottom:3.5rem}
-.nums-head h2{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.4rem);
-  font-weight:400;letter-spacing:-0.015em;line-height:1.25}
-.nums-head p{font-size:.9rem;color:var(--g400);margin-top:.5rem}
-.nums-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;
-  border-top:1px solid rgba(255,255,255,.08)}
-.nc{padding:2.5rem 1rem 2.5rem 0;text-align:center}
-.nc-val{font-family:var(--serif);font-size:2.6rem;font-weight:400;
-  line-height:1;letter-spacing:-0.03em;margin-bottom:.35rem}
-.nc-lab{font-size:.75rem;color:var(--g400);line-height:1.4}
-
-/* UPCOMING PRODUCT */
-.product{padding:6rem 2rem;max-width:1200px;margin:0 auto}
-.product-card{
-  background:var(--off);border:1px solid var(--g100);border-radius:20px;
-  overflow:hidden;display:grid;grid-template-columns:1fr 1fr;min-height:420px;
-  transition:border-color .3s}
-.product-card:hover{border-color:var(--g300)}
-.product-text{padding:3.5rem;display:flex;flex-direction:column;justify-content:center}
-.product-badge{
-  display:inline-flex;align-items:center;gap:.4rem;
-  font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;
-  color:var(--g400);margin-bottom:1.2rem;
-}
-.product-badge::before{
-  content:'';width:6px;height:6px;border-radius:50%;
-  background:#22c55e;animation:pulse 2s ease infinite;
-}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.product-name{font-family:var(--serif);font-size:2.2rem;font-weight:400;
-  letter-spacing:-0.02em;margin-bottom:.75rem;line-height:1.2}
-.product-desc{font-size:.95rem;line-height:1.7;color:var(--g500);max-width:380px}
-.product-visual{
-  background:var(--black);display:flex;align-items:center;justify-content:center;
-  position:relative;overflow:hidden}
-.product-visual canvas{position:absolute;inset:0;width:100%;height:100%}
-.pv-center{position:relative;z-index:1;text-align:center}
-.pv-icon{
-  width:64px;height:64px;border:2px solid rgba(255,255,255,.15);
-  border-radius:16px;display:flex;align-items:center;justify-content:center;
-  margin:0 auto 1rem;backdrop-filter:blur(8px);
-  background:rgba(255,255,255,.04)}
-.pv-icon svg{width:28px;height:28px}
-.pv-soon{font-size:.7rem;font-weight:600;text-transform:uppercase;
-  letter-spacing:.12em;color:rgba(255,255,255,.3)}
+/* SECTION CHROME */
+section{padding:9rem 3rem;position:relative;z-index:1}
+.frame{max-width:1240px;margin:0 auto}
+.lab{font-family:var(--mono);font-size:0.58rem;letter-spacing:4px;text-transform:uppercase;color:var(--gray);margin-bottom:2.8rem;display:flex;align-items:center;gap:1rem}
+.lab i{font-style:normal;color:var(--dim)}
+.lab::before{content:'';width:30px;height:1px;background:var(--gray)}
+.big{font-size:clamp(1.9rem,4.4vw,3.6rem);font-weight:420;line-height:1.18;letter-spacing:-0.02em;max-width:940px}
+.big em{font-style:normal;color:var(--dim);transition:color 1.2s}
+.big em.lit{color:var(--gray)}
 
 /* MISSION */
-.mission{padding:6rem 2rem;text-align:center;border-top:1px solid var(--g100)}
-.mission p{
-  font-family:var(--serif);font-size:clamp(1.3rem,2.5vw,1.9rem);
-  font-weight:400;line-height:1.55;color:var(--g500);
-  max-width:680px;margin:0 auto}
-.mission em{font-style:italic;color:var(--black)}
+.mission-foot{margin-top:4rem;display:flex;gap:4rem;flex-wrap:wrap}
+.mf{font-family:var(--mono);font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--dim);line-height:2.2}
+.mf b{display:block;color:var(--gray);font-weight:500}
+
+/* SYSTEMS */
+.prod-row{display:grid;grid-template-columns:120px 1.1fr 1fr;gap:3rem;padding:4rem 0;border-top:1px solid var(--line);align-items:start;position:relative;transition:background 0.5s}
+.prod-row:last-child{border-bottom:1px solid var(--line)}
+.prod-row::before{content:'';position:absolute;left:0;top:-1px;height:1px;width:0;background:var(--white);transition:width 0.7s cubic-bezier(0.16,1,0.3,1)}
+.prod-row:hover::before{width:100%}
+.prod-id{font-family:var(--mono);font-size:0.62rem;color:var(--dim);letter-spacing:2px;padding-top:0.6rem;line-height:2}
+.prod-id b{display:block;color:var(--gray);font-weight:500}
+.prod-name{font-size:2.1rem;font-weight:540;letter-spacing:-0.02em;line-height:1.12;font-stretch:88%}
+.prod-name .tag{display:block;font-family:var(--mono);font-size:0.58rem;letter-spacing:3px;text-transform:uppercase;color:var(--gray);margin-top:1rem;font-weight:400}
+.prod-name .status{display:inline-flex;align-items:center;gap:0.5rem;font-family:var(--mono);font-size:0.55rem;letter-spacing:2px;color:var(--dim);border:1px solid var(--line2);padding:0.35rem 0.7rem;margin-top:1.2rem;text-transform:uppercase}
+.prod-name .status::before{content:'●';font-size:0.5rem;color:var(--white);animation:blink 2s infinite}
+.prod-desc{color:var(--gray);line-height:1.85;font-size:0.95rem;font-weight:300}
+.prod-desc b{color:var(--white);font-weight:500}
+.prod-feat{margin-top:1.6rem;display:flex;flex-wrap:wrap;gap:0.55rem}
+.prod-feat span{font-family:var(--mono);font-size:0.56rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);border:1px solid var(--line);padding:0.38rem 0.85rem;transition:all 0.3s}
+.prod-row:hover .prod-feat span{border-color:var(--line2);color:var(--gray)}
+
+/* STRIP */
+.strip{padding:5.5rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;position:relative;z-index:1;background:var(--bg2)}
+.strip-track{display:flex;gap:3.2rem;white-space:nowrap;width:max-content;animation:slide 36s linear infinite}
+.strip-track span{font-size:clamp(1.4rem,2.8vw,2.3rem);font-weight:320;letter-spacing:-0.01em;color:var(--ghost);text-transform:uppercase;font-stretch:80%}
+.strip-track span.on{color:var(--white);font-weight:560}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* DOCTRINE */
+.doc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.doc{background:var(--bg);padding:3rem 2.4rem;position:relative;transition:background 0.4s}
+.doc:hover{background:var(--bg2)}
+.doc .dn{font-family:var(--mono);font-size:0.58rem;letter-spacing:3px;color:var(--dim);margin-bottom:2.2rem;display:flex;justify-content:space-between}
+.doc h3{font-size:1.35rem;font-weight:540;letter-spacing:-0.01em;margin-bottom:1.1rem;font-stretch:90%}
+.doc p{color:var(--gray);font-size:0.9rem;line-height:1.85;font-weight:300}
+.doc .dmark{position:absolute;bottom:2rem;right:2.2rem;width:22px;height:22px;border:1px solid var(--line2);transition:all 0.4s}
+.doc:hover .dmark{border-color:var(--gray);transform:rotate(45deg)}
 
 /* CTA */
-.cta{
-  background:var(--black);color:var(--white);
-  padding:5rem 2.5rem;text-align:center}
-.cta h2{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.6rem);
-  font-weight:400;letter-spacing:-0.02em;margin-bottom:.6rem}
-.cta p{font-size:.9rem;color:var(--g400);margin-bottom:2rem}
-.cta-btn{
-  display:inline-block;background:var(--white);color:var(--black);
-  padding:.75rem 2.2rem;border-radius:999px;font-weight:600;font-size:.9rem;
-  transition:opacity .15s,transform .15s}
-.cta-btn:hover{opacity:.85;transform:translateY(-1px)}
+.cta{padding:12rem 3rem;text-align:center;position:relative;z-index:1}
+.cta .lab{justify-content:center}
+.cta .lab::before{display:none}
+.cta h2{font-size:clamp(2.6rem,8vw,7rem);font-weight:660;letter-spacing:-0.035em;line-height:0.92;text-transform:uppercase;font-stretch:75%}
+.cta h2 em{font-style:normal;-webkit-text-stroke:1.2px var(--white);color:transparent}
+.cta p{color:var(--gray);margin-top:2rem;font-size:0.98rem;font-weight:300}
+.cta a.mail{display:inline-flex;align-items:center;gap:1rem;margin-top:3.2rem;font-family:var(--mono);font-size:0.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--bg);text-decoration:none;background:var(--white);padding:1.1rem 2.2rem;transition:letter-spacing 0.3s,transform 0.3s}
+.cta a.mail:hover{letter-spacing:5px;transform:translateY(-2px)}
+.cta .alt{display:block;margin-top:1.6rem;font-family:var(--mono);font-size:0.58rem;letter-spacing:2px;color:var(--dim);text-transform:uppercase}
 
 /* FOOTER */
-footer{border-top:1px solid var(--g100);padding:2rem 2.5rem;
-  max-width:1200px;margin:0 auto;
-  display:flex;justify-content:space-between;align-items:center;
-  font-size:.75rem;color:var(--g400);flex-wrap:wrap;gap:1rem}
-footer a{transition:color .15s}
-footer a:hover{color:var(--black)}
-.footer-links{display:flex;gap:1.5rem}
+footer{padding:2.4rem 3rem;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1;font-family:var(--mono);font-size:0.58rem;letter-spacing:2px;color:var(--dim);flex-wrap:wrap;gap:1rem}
+footer .fr{display:flex;gap:2.5rem}
+footer a{color:var(--dim);text-decoration:none;transition:color 0.3s}
+footer a:hover{color:var(--gray)}
 
-/* ANIMATIONS */
-@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
-.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
-.reveal.vis{opacity:1;transform:translateY(0)}
+/* REVEAL */
+.r{opacity:0;transform:translateY(44px);transition:opacity 1s cubic-bezier(0.16,1,0.3,1),transform 1s cubic-bezier(0.16,1,0.3,1)}
+.r.v{opacity:1;transform:translateY(0)}
+.r2{transition-delay:0.12s}.r3{transition-delay:0.24s}
 
-/* MOBILE */
-@media(max-width:900px){
-  .what-inner{grid-template-columns:1fr;gap:2.5rem}
-  .what-left{position:static}
-  .nums-grid{grid-template-columns:1fr 1fr}
-  .product-card{grid-template-columns:1fr}
-  .product-visual{min-height:280px}
-}
-@media(max-width:600px){
-  .nav-right .desk{display:none}
-  .nav-inner{padding:0 1.25rem}
-  .hero{padding:6rem 1.5rem}
-  .what{padding:4rem 1.5rem}
-  .product{padding:4rem 1.5rem}
-  .nums-grid{grid-template-columns:1fr}
-  .nums-inner{padding:3.5rem 1.5rem}
-  .product-text{padding:2.5rem}
-  .cta{padding:4rem 1.5rem}
-}
+/* KILL FLASH */
+@keyframes shake{0%,100%{transform:translate(0,0)}25%{transform:translate(2px,-2px)}50%{transform:translate(-2px,2px)}75%{transform:translate(1px,1px)}}
+body.hit{animation:shake 0.18s}
+
 @media(prefers-reduced-motion:reduce){
-  .hero h1,.hero-sub{animation:none;opacity:1}
-  .reveal{opacity:1;transform:none;transition:none}
+*,*::before,*::after{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important}
+.hero h1 .l b,.hero-meta,.hero-sub,.hero-tel,.hero-foot{opacity:1;transform:none}
+.r{opacity:1;transform:none}
+}
+
+@media(max-width:920px){
+.ticker{font-size:0.5rem}
+nav{padding:1.2rem 1.4rem}nav.scr{padding:0.8rem 1.4rem}
+.nav-r{gap:1.4rem}.nav-r a:not(.nav-cta){display:none}
+.hero{padding:7rem 1.4rem 0}
+.hero-grid{grid-template-columns:1fr;gap:2rem}
+.hero-tel{text-align:left}
+section{padding:6rem 1.4rem}
+.prod-row{grid-template-columns:1fr;gap:1.4rem;padding:3rem 0}
+.prod-id{display:flex;gap:1.5rem;padding-top:0}
+.doc-grid{grid-template-columns:1fr}
+.cta{padding:8rem 1.4rem}
+footer{flex-direction:column;align-items:flex-start}
 }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<header class="nav">
-  <div class="nav-inner">
-    <a href="#" class="nav-logo">
-      <svg viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg">
-        <path d="M20 18 C40 18, 50 6, 70 6 S95 26, 115 16 S135 4, 155 10 S180 22, 200 14" stroke="#0a0a0a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-        <text x="28" y="44" font-family="Inter, -apple-system, sans-serif" font-size="22" font-weight="600" fill="#0a0a0a" letter-spacing="-0.5">psyconomic</text>
-      </svg>
-    </a>
-    <div class="nav-right">
-      <a href="#what" class="desk">Research</a>
-      <a href="#product" class="desk">Product</a>
-    </div>
-  </div>
-</header>
+<canvas id="radar"></canvas>
+<div class="vignette"></div>
 
-<!-- HERO -->
-<section class="hero">
-  <canvas class="hero-canvas" id="heroCanvas"></canvas>
-  <div class="hero-content">
-    <h1>We're rethinking how neural networks scale</h1>
-    <p class="hero-sub">Psyconomic is an AI research company building neural architectures that deliver frontier intelligence at constant cost so AI can reach everyone, not just those who can afford it.</p>
-  </div>
-</section>
-
-<!-- WHAT WE DO -->
-<section class="what" id="what">
-  <div class="what-inner">
-    <div class="what-left reveal">
-      <div class="what-eyebrow">What We're Building</div>
-      <h2 class="what-title">Replacing the assumptions that make AI expensive</h2>
-    </div>
-    <div class="what-cards">
-      <div class="wc reveal">
-        <h3>Constant-cost inference</h3>
-        <p>Current AI models get more expensive the longer you talk to them. We've built an architecture where every token costs the same, first or millionth.</p>
-      </div>
-      <div class="wc reveal">
-        <h3>Memory that persists</h3>
-        <p>Today's AI forgets everything when you close a chat. Our architecture saves its state to disk and picks up exactly where it left off, no re-reading, no re-computing.</p>
-      </div>
-      <div class="wc reveal">
-        <h3>Intelligence at the edge</h3>
-        <p>Our models are designed to run on devices with limited power like phones, robots, and vehicles, not just massive data centers.</p>
-      </div>
-      <div class="wc reveal">
-        <h3>A new kind of attention</h3>
-        <p>We replace global self-attention, the bottleneck behind today's AI costs, with five constant-cost mechanisms coordinated by a single learned signal.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- NUMBERS -->
-<div class="nums-bg">
-  <svg class="nums-wave" viewBox="0 0 1440 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0 200C120 120,240 280,360 200S600 80,720 200S960 320,1080 200S1320 120,1440 200" stroke="#fff" stroke-width="1.5" fill="none"/>
-    <path d="M0 220C140 140,280 300,400 220S620 100,750 220S980 340,1100 220S1340 140,1440 220" stroke="#fff" stroke-width="1" fill="none"/>
-  </svg>
-  <div class="nums-inner">
-    <div class="nums-head reveal">
-      <h2>Built different, by the numbers</h2>
-      <p>Early benchmarks against transformer baselines</p>
-    </div>
-    <div class="nums-grid reveal">
-      <div class="nc"><div class="nc-val">3.4×</div><div class="nc-lab">Better recall</div></div>
-      <div class="nc"><div class="nc-val">O(1)</div><div class="nc-lab">Inference cost</div></div>
-      <div class="nc"><div class="nc-val">130K×</div><div class="nc-lab">Smaller state</div></div>
-      <div class="nc"><div class="nc-val">13.5×</div><div class="nc-lab">Cheaper at scale</div></div>
-    </div>
+<div class="ticker">
+  <div class="ticker-track" id="tickerTrack">
+    <span>SYS <b>NOMINAL</b></span><span>GRID <b>26.8466°N / 80.9462°E</b></span><span>UPLINK <b>SECURE</b></span><span>MODE <b>AIR-GAP READY</b></span><span>FUSION CORE <b>ACTIVE</b></span><span>TRACKS <b id="tkTracks">07</b></span><span>LATENCY <b>&lt;100MS</b></span><span>CLOCK <b id="tkClock">--:--:--</b> IST</span>
+    <span>SYS <b>NOMINAL</b></span><span>GRID <b>26.8466°N / 80.9462°E</b></span><span>UPLINK <b>SECURE</b></span><span>MODE <b>AIR-GAP READY</b></span><span>FUSION CORE <b>ACTIVE</b></span><span>TRACKS <b>07</b></span><span>LATENCY <b>&lt;100MS</b></span><span>CLOCK <b>--:--:--</b> IST</span>
   </div>
 </div>
 
-<!-- UPCOMING PRODUCT -->
-<section class="product" id="product">
-  <div class="product-card reveal">
-    <div class="product-text">
-      <div class="product-badge">Upcoming</div>
-      <h2 class="product-name">Our first product is on the way</h2>
-      <p class="product-desc">An AI built on our patented architecture with constant-cost inference, persistent memory, and the ability to run anywhere. We're not optimizing the old paradigm. We're replacing it.</p>
+<nav id="nav">
+  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQwAAABoCAYAAAAEns5rAAAFIUlEQVR4nO3d25KbMBBFUUjl/3+ZPMy4QmGMdemW+rT2ekolsdD1IDC2tw0AAAAAAAAAEtnv/vI4jqOpsH1/K6+2rLsycM+zbxk33PkzuwJXrWEFwF+4wIAPdgCwQGAsgp0bLJgGBpMyLnYYsMAOYxGEOSwQGACKmQcGZzJ8cvwadawRx1HV2j9/rSsyg+VzI1bH6nkmxeJ5ljtPZVjf43g61vnfeo9bepyr2uP2jF3p67/VyboOd+V9q4P0JUnvGes4sazXp2N5/N+IRrTVauxbX/9Ubsnflb62toxPr7Wow7aJBobHYHsu0payVUNjRFst+8a7n2e2rbW8p9e4BEa0xTezbNWF32LE4lMZo566tlwqlJbT+1rJHYYnq8ljMbmVwsa7rdF2AqPVXuZ5tUcqMKIPKrRZniwsyonILTCUO0257hkxHnPc9bvMDoNJA8znHhgzP8Ow/5p1fMzTOu6cmJ65Prh1HMcxa8Gej7vv+64+EVb9cqKeNr7+rDj2M9fOE5lLkhp3He31ZF9pfSIOvoeV2loiQl9Y1sE9MBTT3dLdGS+rldpa4tUHM3fZ5zpY1CPlDgPvvCetxa4uk2vbR/eF1/FSfPgsqpUXzCyr72i9scMYjBCBMgJjEZx5YYHAGIyFC2UExmARnksBWhEYg83aYbCz0RYl8E3eJcnwJOUo7DB8RW5nT92irC92GEgjclj0itI2s8CI0iDci3KGQpso48cOA0AxnvREehk+1RvlPqHpDiNiR2MdERZUdhKXJEwErC7KGpAIjBnfZZFxtxRl0kFX2nsY528sYqH896kvogZk7bX79ZuqGHtb5oER5ebMtuWfLJH6OhL6xI/EJQkwStSdVhQygTFyIJk0sTAecbgEBgM8Dn1th778TmaHsW1jBlRx0ijWudYKbVQgFRjb5jtxlCelct1fvt2sZOznkwuMbfMZ3JIyo999t/oq+VlK6j5r7PHDLTBGfK29xTFqylGZWKrBURrIFu3bT3rKWU2qziqZcEyQnBh7AAAAAAAAAEC127vGrzvOVneVr3ew78q1Pqanc3s+1VepPUCpx4+317wvXlNG9Aegali0paYMAggzhXvSM1OYANmEC4zoCDSsLFxgRN9yR68f4ClcYACIi8AAUIzAAFBM+mcG1L4y/07tTdTr1+gDI0kGxrdF9vRg1exnHryf2yBM4EnukqTljOxVF2A1UoHRuvgJDcCGVGD0IDSAfjKBMfozGwDeyQQGgPkIDADFTN5WZauPWj1zhreO55F8DkNZz3Mhn8oYbfYJwur4s/tREYEx2b7v++yHyT6ZHQzeovZ7ZKkD4zzI2Sd/L/rn2czffY0kbWBcB7D2TL4S+qXfKo/rpwyMTAM0glJ/KYZbpjBJGRiACrVPXBMYmEpxxzBC1CAhMOCGMLB316cjQ4TAQBdCYb6RIUJgoAjBoKXk1wZbEBh4EykcZl+zfxOpr55Y7UJMAqP2pxIRy4gxir7wW7W2K8K6KPmN4Ct2GIuxnqhZg8BbTb+NCJfSL5cmMBbAJ0O1fRsDq0ApCQ0CI6HaCUQoaLsbP69dScrAWPW3O2a/R484Wr5GgUuSxRAO+MRqbqT9ir7j1/XP6rK0A5rSBsZLxgWWsU3QwCWJqKgfTkJu6XcYAOwQGAGwK4AKAgNAMZnAyH4Wzt4+5CATGL0UFqRCHbE2qcBoXVBKC1GprlhPuMDg9x9+2rhCO6En3HMYlgtFfdFZ/KwiAAAAAAAAsJp/aZhQq9dQMjQAAAAASUVORK5CYII=" alt="Northern Halt" class="logo">
+  <div class="nav-r">
+    <a href="#mission">Mission</a>
+    <a href="#systems">Systems</a>
+    <a href="#doctrine">Doctrine</a>
+    <a href="#contact" class="nav-cta">Request Briefing</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-meta">Intelligence · Security · Sovereignty</div>
+  <h1>
+    <span class="l"><b>NORTHERN</b></span>
+    <span class="l"><b>HALT</b></span>
+  </h1>
+  <div class="hero-grid">
+    <p class="hero-sub">Decision superiority for contested environments. We build <b>autonomous systems</b> and <b>intelligence fusion</b> that operate where the signal ends, no GPS, no cloud, no delay.</p>
+    <div class="hero-tel">
+      <div>SWEEP <span class="vk" id="telSweep">000.0°</span></div>
+      <div>CONTACTS <span class="vk" id="telContacts">05</span></div>
+      <div>NEUTRALIZED <span class="vk hot" id="telKills">00</span></div>
+      <div>FUSION <span class="vk">4-GATE / ACTIVE</span></div>
+      <div>ENV <span class="vk">GPS-DENIED CAPABLE</span></div>
     </div>
-    <div class="product-visual">
-      <canvas id="prodCanvas"></canvas>
-      <div class="pv-center">
-        <div class="pv-icon">
-          <svg viewBox="0 0 28 28" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round">
-            <path d="M3 18C7 12,11 22,15 16S23 8,25 14"/>
-            <circle cx="14" cy="14" r="11" opacity=".25"/>
-          </svg>
-        </div>
-        <div class="pv-soon">Coming Soon</div>
-      </div>
+  </div>
+  <div class="hero-foot">
+    <div class="blink">SYSTEMS ONLINE</div>
+    <div class="scrolldown"><span>SCROLL</span><i></i></div>
+    <div>26.8°N / 80.9°E — BUILT IN INDIA</div>
+  </div>
+</section>
+
+<section id="mission">
+  <div class="frame">
+    <div class="lab r">Mission <i>/ 01</i></div>
+    <p class="big r">Modern conflict is decided in the gap between <em>sensing</em> and <em>acting</em>. We engineer autonomy for the edge of that gap. <em>Systems that see, decide, and act without GPS, without cloud, and without delay.</em></p>
+    <div class="mission-foot r r2">
+      <div class="mf"><b>Operating Domain</b>Contested · Denied · Air-Gapped</div>
+      <div class="mf"><b>Design Authority</b>Indigenous — Full Stack</div>
+      <div class="mf"><b>Posture</b>Human on the Loop</div>
     </div>
   </div>
 </section>
 
-<!-- MISSION -->
-<section class="mission reveal">
-  <p>90% of the world cannot afford frontier AI today. We believe that's an architecture problem, not a business model problem, and we're building the <em>fix</em>.</p>
+<section id="systems" style="padding-top:4rem">
+  <div class="frame">
+    <div class="lab r">Systems <i>/ 02</i></div>
+
+    <div class="prod-row r">
+      <div class="prod-id"><b>NH-A1</b>AERIAL</div>
+      <div class="prod-name">Autonomous Aerial Systems
+        <span class="tag">Unmanned · Edge AI · GPS-Denied</span>
+        <span class="status">In Development</span>
+      </div>
+      <div>
+        <p class="prod-desc">Onboard intelligence that lets unmanned platforms <b>perceive, navigate, and respond in real time,</b>  independent of satellites or external compute. Built to fly through jamming, signal denial, and electronic contest.</p>
+        <div class="prod-feat"><span>Real-Time Perception</span><span>Visual-Inertial Navigation</span><span>Command Arbitration</span><span>Sub-100ms Response</span></div>
+      </div>
+    </div>
+
+    <div class="prod-row r">
+      <div class="prod-id"><b>NH-F1</b>FUSION</div>
+      <div class="prod-name">BRAHMAN
+        <span class="tag">Multi-Source Intelligence Fusion · Command</span>
+        <span class="status">Live Prototype</span>
+      </div>
+      <div>
+        <p class="prod-desc">A unified operational layer that fuses radar, signals, imagery, and human intelligence into a <b>single decision surface</b>. Four-gate correlation engine, entity risk scoring, and a live tactical picture, deployable fully offline by a single command.</p>
+        <div class="prod-feat"><span>Multi-Source Fusion</span><span>Live Correlation</span><span>Threat Mapping</span><span>Air-Gap Deploy</span><span>Decision Support</span></div>
+      </div>
+    </div>
+
+  </div>
 </section>
 
+<div class="strip">
+  <div class="strip-track">
+    <span class="on">Autonomous</span><span>·</span><span>Resilient</span><span>·</span><span class="on">Onboard</span><span>·</span><span>Real-Time</span><span>·</span><span class="on">Sovereign</span><span>·</span><span>Edge-Native</span><span>·</span>
+    <span class="on">Autonomous</span><span>·</span><span>Resilient</span><span>·</span><span class="on">Onboard</span><span>·</span><span>Real-Time</span><span>·</span><span class="on">Sovereign</span><span>·</span><span>Edge-Native</span><span>·</span>
+  </div>
+</div>
 
+<section id="doctrine" style="padding-top:2rem">
+  <div class="frame">
+    <div class="lab r">Doctrine <i>/ 04</i></div>
+    <div class="doc-grid">
+      <div class="doc r"><div class="dn"><span>D-01</span><span>DESIGN</span></div><h3>Sovereign by design</h3><p>No foreign cloud. No external dependency. Every line of code, every model, every deployment artifact is built and held in India, because classified systems cannot phone home.</p><div class="dmark"></div></div>
+      <div class="doc r r2"><div class="dn"><span>D-02</span><span>COMPUTE</span></div><h3>Edge-native autonomy</h3><p>Intelligence belongs on the platform, not in a datacenter a continent away. Our systems carry their own perception, their own inference, and their own judgment, and keep working when the link is cut.</p><div class="dmark"></div></div>
+      <div class="doc r r3"><div class="dn"><span>D-03</span><span>COMMAND</span></div><h3>Human on the loop</h3><p>Machines compress the time between sensing and understanding. Decisions of consequence stay with the commander, presented with evidence, confidence, and a recommendation. Never a black box.</p><div class="dmark"></div></div>
+    </div>
+  </div>
+</section>
 
-<!-- FOOTER -->
+<div class="cta" id="contact">
+  <div class="lab r">Contact / 05</div>
+  <h2 class="r">Take <em>control.</em></h2>
+  <p class="r r2">Briefings and platform demonstrations available to qualified defence and government partners.</p>
+  <a href="mailto:contact@northernhalt.com" class="mail r r2">Request Briefing →</a>
+  <span class="alt r r3">contact@northernhalt.com</span>
+</div>
+
 <footer>
-  <span>© 2026 Psyconomic</span>
-  <div class="footer-links">
-    <a href="https://psyconomic.com">psyconomic.com</a>
+  <span>© 2026 NORTHERNHALT TECHNOLOGIES PRIVATE LIMITED, KOCHI INDIA</span>
+  <div class="fr">
+    <span>26.8°N / 80.9°E</span>
+    <a href="#mission">MISSION</a>
+    <a href="#systems">SYSTEMS</a>
+    <a href="#contact">CONTACT</a>
   </div>
 </footer>
 
 <script>
-// Scroll reveal
-const obs=new IntersectionObserver(es=>{
-  es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')})
-},{threshold:.12});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+/* ════════════════════════════════════════════════════════
+   TACTICAL CANVAS — radar sweep, tracked contacts, lock-on
+   + INTERCEPT GAME: aim at a contact, click, boom.
+   ════════════════════════════════════════════════════════ */
+const cv=document.getElementById('radar'),c=cv.getContext('2d');
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let W,H,cx,cy,DPR;
+function rs(){DPR=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;cv.style.width=W+'px';cv.style.height=H+'px';c.setTransform(DPR,0,0,DPR,0,0);cx=W*0.76;cy=H*0.42}
+rs();addEventListener('resize',rs);
 
-// Hero wave animation
-(function(){
-  const c=document.getElementById('heroCanvas');
-  if(!c)return;
-  const ctx=c.getContext('2d');
-  let w,h,t=0;
-  function resize(){w=c.width=c.offsetWidth*devicePixelRatio;h=c.height=c.offsetHeight*devicePixelRatio;ctx.scale(devicePixelRatio,devicePixelRatio)}
-  resize();window.addEventListener('resize',resize);
-  function draw(){
-    const cw=c.offsetWidth,ch=c.offsetHeight;
-    ctx.clearRect(0,0,cw,ch);
-    for(let i=0;i<5;i++){
-      ctx.beginPath();
-      ctx.strokeStyle=`rgba(10,10,10,${0.025-i*0.004})`;
-      ctx.lineWidth=1.5-i*0.2;
-      const yBase=ch*0.35+i*ch*0.08;
-      for(let x=0;x<=cw;x+=4){
-        const y=yBase+Math.sin(x*0.004+t+i*0.8)*40+Math.sin(x*0.007+t*0.6+i)*20;
-        x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
-      }
-      ctx.stroke();
-    }
-    t+=0.008;
-    requestAnimationFrame(draw);
-  }
-  draw();
-})();
+/* mouse state (viewport coords — canvas is fixed, so same space) */
+const mouse={x:-9999,y:-9999};
+addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY},{passive:true});
+addEventListener('mouseleave',()=>{mouse.x=-9999;mouse.y=-9999});
 
-// Product card canvas
-(function(){
-  const c=document.getElementById('prodCanvas');
-  if(!c)return;
-  const ctx=c.getContext('2d');
-  let w,h,t=0;
-  const dots=[];
-  function resize(){
-    w=c.width=c.offsetWidth*devicePixelRatio;
-    h=c.height=c.offsetHeight*devicePixelRatio;
-    ctx.scale(devicePixelRatio,devicePixelRatio);
+const NAMES=['TRK','UAV','SIG','CTC'];
+function mkDrone(edge){
+  return {x:edge?-30:Math.random()*W,y:H*0.12+Math.random()*H*0.65,
+    s:0.18+Math.random()*0.4,size:1.6+Math.random()*2,blink:Math.random()*6,
+    id:NAMES[Math.floor(Math.random()*NAMES.length)]+'-'+String(Math.floor(Math.random()*900)+100),
+    spd:Math.floor(38+Math.random()*70),trail:[],lock:Math.random()*5,lockT:4+Math.random()*9,
+    dead:false};
+}
+const drones=[];for(let i=0;i<6;i++)drones.push(mkDrone(false));
+
+/* ── explosions ── */
+const booms=[];   // {x,y,t,parts:[{x,y,vx,vy,life,sz}]}
+const floats=[];  // floating text {x,y,t,txt}
+let kills=0;
+const HIT_R=30;   // aim assist radius
+
+function explode(d){
+  const parts=[];
+  const n=26+Math.floor(Math.random()*10);
+  for(let i=0;i<n;i++){
+    const a=Math.random()*6.283,v=1.5+Math.random()*4.5;
+    parts.push({x:d.x,y:d.y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life:0.6+Math.random()*0.5,sz:0.8+Math.random()*1.8});
   }
-  resize();
-  for(let i=0;i<40;i++){
-    dots.push({x:Math.random()*600,y:Math.random()*500,r:Math.random()*1.5+0.5,
-      sx:Math.random()*0.3-0.15,sy:Math.random()*0.3-0.15,o:Math.random()*0.15+0.05});
+  booms.push({x:d.x,y:d.y,t:0,parts});
+  floats.push({x:d.x,y:d.y-20,t:0,txt:d.id+' NEUTRALIZED'});
+  kills++;
+  const ke=document.getElementById('telKills');
+  if(ke)ke.textContent=String(kills).padStart(2,'0');
+  if(!RM){document.body.classList.remove('hit');void document.body.offsetWidth;document.body.classList.add('hit')}
+}
+
+/* find drone under a point */
+function droneAt(px,py){
+  let best=null,bd=HIT_R;
+  for(const d of drones){
+    const dx=d.x-px,dy=d.y-py,dist=Math.hypot(dx,dy);
+    if(dist<bd){bd=dist;best=d}
   }
-  window.addEventListener('resize',resize);
-  function draw(){
-    const cw=c.offsetWidth,ch=c.offsetHeight;
-    ctx.clearRect(0,0,cw,ch);
-    for(let i=0;i<3;i++){
-      ctx.beginPath();
-      ctx.strokeStyle=`rgba(255,255,255,${0.04-i*0.01})`;
-      ctx.lineWidth=1;
-      const yBase=ch*0.4+i*ch*0.12;
-      for(let x=0;x<=cw;x+=4){
-        const y=yBase+Math.sin(x*0.005+t+i*1.2)*30+Math.cos(x*0.008+t*0.7)*15;
-        x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
-      }
-      ctx.stroke();
+  return best;
+}
+
+/* click-to-intercept — ignore clicks on links/buttons/nav so the site still works */
+addEventListener('click',e=>{
+  if(e.target.closest('a,button,nav,input,textarea,select,label'))return;
+  const d=droneAt(e.clientX,e.clientY);
+  if(d){
+    explode(d);
+    const i=drones.indexOf(d);
+    if(i>-1)drones.splice(i,1);
+    /* respawn from the left after a short delay */
+    setTimeout(()=>drones.push(mkDrone(true)),900+Math.random()*1400);
+  }
+},{passive:true});
+
+let t=0,sweepEl=null,contEl=null;
+function loop(){
+  c.clearRect(0,0,W,H);t+=0.016;
+  const R=Math.min(W,H)*0.46;
+
+  /* grid backdrop */
+  c.strokeStyle='rgba(255,255,255,0.018)';c.lineWidth=1;
+  const gs=Math.max(70,W/16);
+  for(let x=0;x<W;x+=gs){c.beginPath();c.moveTo(x,0);c.lineTo(x,H);c.stroke()}
+  for(let y=0;y<H;y+=gs){c.beginPath();c.moveTo(0,y);c.lineTo(W,y);c.stroke()}
+
+  /* radar rings */
+  for(let i=1;i<=4;i++){
+    c.beginPath();c.arc(cx,cy,R*i/4,0,6.283);
+    c.strokeStyle='rgba(255,255,255,0.045)';c.stroke();
+  }
+  c.strokeStyle='rgba(255,255,255,0.06)';
+  for(let a=0;a<360;a+=15){
+    const rad=a*Math.PI/180,r1=R*0.985;
+    c.beginPath();c.moveTo(cx+Math.cos(rad)*r1,cy+Math.sin(rad)*r1);
+    c.lineTo(cx+Math.cos(rad)*R,cy+Math.sin(rad)*R);c.stroke();
+  }
+  c.beginPath();c.moveTo(cx-R,cy);c.lineTo(cx+R,cy);c.moveTo(cx,cy-R);c.lineTo(cx,cy+R);
+  c.strokeStyle='rgba(255,255,255,0.04)';c.stroke();
+
+  /* sweep */
+  const ang=RM?0.8:t*0.55;
+  if(!RM){
+    const grad=c.createConicGradient(ang-0.55,cx,cy);
+    grad.addColorStop(0,'rgba(255,255,255,0)');
+    grad.addColorStop(0.92,'rgba(255,255,255,0)');
+    grad.addColorStop(1,'rgba(255,255,255,0.13)');
+    c.beginPath();c.moveTo(cx,cy);c.arc(cx,cy,R,ang-0.55,ang);c.closePath();
+    c.fillStyle=grad;c.fill();
+  }
+  c.beginPath();c.moveTo(cx,cy);c.lineTo(cx+Math.cos(ang)*R,cy+Math.sin(ang)*R);
+  c.strokeStyle='rgba(255,255,255,0.16)';c.stroke();
+  c.beginPath();c.arc(cx,cy,2,0,6.283);c.fillStyle='rgba(255,255,255,0.4)';c.fill();
+
+  /* which drone is under the crosshair right now? */
+  const aimed=droneAt(mouse.x,mouse.y);
+
+  /* drones */
+  c.font='500 9px JetBrains Mono, monospace';
+  for(let i=drones.length-1;i>=0;i--){
+    const d=drones[i];
+    if(!RM){d.x+=d.s;if(d.x>W+40){drones.splice(i,1);drones.push(mkDrone(true));continue}}
+    d.trail.push({x:d.x,y:d.y});if(d.trail.length>26)d.trail.shift();
+    for(let j=0;j<d.trail.length-1;j++){
+      const p=d.trail[j],q=d.trail[j+1],al=(j/d.trail.length)*0.1;
+      c.beginPath();c.moveTo(p.x,p.y);c.lineTo(q.x,q.y);
+      c.strokeStyle=`rgba(255,255,255,${al})`;c.lineWidth=0.6;c.stroke();
     }
-    dots.forEach(d=>{
-      d.x+=d.sx;d.y+=d.sy;
-      if(d.x<0||d.x>cw)d.sx*=-1;
-      if(d.y<0||d.y>ch)d.sy*=-1;
-      ctx.beginPath();
-      ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
-      ctx.fillStyle=`rgba(255,255,255,${d.o})`;
-      ctx.fill();
-    });
-    t+=0.01;
-    requestAnimationFrame(draw);
+    const bl=0.4+0.6*Math.abs(Math.sin(t*2+d.blink));
+    c.beginPath();c.arc(d.x,d.y,d.size,0,6.283);
+    c.fillStyle=`rgba(255,255,255,${bl*0.55})`;c.fill();
+
+    if(d===aimed){
+      /* ── AIMED: hostile red lock — brackets spin in tight, FIRE prompt ── */
+      const x=d.x,y=d.y,sz=14,g=5,rot=t*2.2;
+      c.save();c.translate(x,y);c.rotate(rot);
+      c.strokeStyle='rgba(224,49,49,0.85)';c.lineWidth=1.4;
+      c.beginPath();
+      c.moveTo(-sz,-sz+g);c.lineTo(-sz,-sz);c.lineTo(-sz+g,-sz);
+      c.moveTo(sz-g,-sz);c.lineTo(sz,-sz);c.lineTo(sz,-sz+g);
+      c.moveTo(sz,sz-g);c.lineTo(sz,sz);c.lineTo(sz-g,sz);
+      c.moveTo(-sz+g,sz);c.lineTo(-sz,sz);c.lineTo(-sz,sz-g);
+      c.stroke();c.restore();
+      /* pulsing outer ring */
+      c.beginPath();c.arc(x,y,sz+6+Math.sin(t*6)*2,0,6.283);
+      c.strokeStyle='rgba(224,49,49,0.25)';c.lineWidth=1;c.stroke();
+      /* label */
+      c.fillStyle='rgba(224,49,49,0.9)';
+      c.fillText(d.id,x+sz+9,y-2);
+      c.fillStyle='rgba(224,49,49,0.55)';
+      c.fillText('WEAPONS FREE — CLICK',x+sz+9,y+9);
+    }else{
+      /* periodic passive lock-on cycle (white) */
+      d.lock+=0.016;
+      const phase=d.lock%d.lockT;
+      if(phase<2.6){
+        const k=Math.min(phase/0.4,1),sz=10+(1-k)*22,g=4,x=d.x,y=d.y;
+        c.strokeStyle=`rgba(255,255,255,${0.34*k})`;c.lineWidth=1;
+        c.beginPath();
+        c.moveTo(x-sz,y-sz+g);c.lineTo(x-sz,y-sz);c.lineTo(x-sz+g,y-sz);
+        c.moveTo(x+sz-g,y-sz);c.lineTo(x+sz,y-sz);c.lineTo(x+sz,y-sz+g);
+        c.moveTo(x+sz,y+sz-g);c.lineTo(x+sz,y+sz);c.lineTo(x+sz-g,y+sz);
+        c.moveTo(x-sz+g,y+sz);c.lineTo(x-sz,y+sz);c.lineTo(x-sz,y+sz-g);
+        c.stroke();
+        if(k>0.9){
+          c.fillStyle='rgba(255,255,255,0.34)';c.fillText(d.id,x+sz+7,y-2);
+          c.fillStyle='rgba(255,255,255,0.18)';c.fillText(d.spd+'KM/H',x+sz+7,y+9);
+        }
+      }else{
+        c.beginPath();c.arc(d.x,d.y,d.size+4+Math.sin(t*3+d.blink)*2,0,6.283);
+        c.strokeStyle=`rgba(255,255,255,${bl*0.13})`;c.lineWidth=0.5;c.stroke();
+      }
+    }
   }
-  draw();
-})();
+
+  /* ── EXPLOSIONS ── */
+  for(let i=booms.length-1;i>=0;i--){
+    const b=booms[i];b.t+=0.016;
+    /* white flash */
+    if(b.t<0.12){
+      const fa=(1-b.t/0.12)*0.5;
+      c.beginPath();c.arc(b.x,b.y,8+b.t*220,0,6.283);
+      c.fillStyle=`rgba(255,255,255,${fa})`;c.fill();
+    }
+    /* shockwave rings */
+    for(let r=0;r<2;r++){
+      const rt=b.t-r*0.07;
+      if(rt>0&&rt<0.7){
+        c.beginPath();c.arc(b.x,b.y,rt*150,0,6.283);
+        c.strokeStyle=`rgba(224,49,49,${(1-rt/0.7)*0.5})`;c.lineWidth=1.6-r*0.6;c.stroke();
+      }
+    }
+    /* debris particles */
+    let alive=false;
+    for(const p of b.parts){
+      p.life-=0.016;
+      if(p.life<=0)continue;
+      alive=true;
+      p.x+=p.vx;p.y+=p.vy;p.vx*=0.96;p.vy*=0.96;p.vy+=0.03;
+      const a=Math.min(p.life*1.8,1);
+      /* mix of red sparks and white debris */
+      c.fillStyle=Math.random()<0.4?`rgba(224,49,49,${a})`:`rgba(255,255,255,${a*0.8})`;
+      c.fillRect(p.x,p.y,p.sz,p.sz);
+    }
+    /* fading scorch ring */
+    if(b.t<1.4){
+      c.beginPath();c.arc(b.x,b.y,5,0,6.283);
+      c.strokeStyle=`rgba(255,255,255,${(1-b.t/1.4)*0.2})`;c.lineWidth=1;c.stroke();
+    }
+    if(!alive&&b.t>1.5)booms.splice(i,1);
+  }
+
+  /* floating kill text */
+  c.font='600 10px JetBrains Mono, monospace';
+  for(let i=floats.length-1;i>=0;i--){
+    const f=floats[i];f.t+=0.016;f.y-=0.45;
+    const a=Math.max(0,1-f.t/1.6);
+    if(a<=0){floats.splice(i,1);continue}
+    c.fillStyle=`rgba(224,49,49,${a})`;
+    c.fillText(f.txt,f.x-30,f.y);
+  }
+  c.font='500 9px JetBrains Mono, monospace';
+
+  /* hero telemetry */
+  if(!sweepEl)sweepEl=document.getElementById('telSweep');
+  if(sweepEl)sweepEl.textContent=((ang*57.2958)%360).toFixed(1).padStart(5,'0')+'°';
+  if(!contEl)contEl=document.getElementById('telContacts');
+  if(contEl)contEl.textContent=String(drones.length).padStart(2,'0');
+
+  if(!RM)requestAnimationFrame(loop);
+}
+loop();
+
+/* tap support for touch devices — tap near a dot to intercept */
+addEventListener('touchend',e=>{
+  if(e.target.closest('a,button,nav,input,textarea,select,label'))return;
+  const tch=e.changedTouches[0];
+  if(!tch)return;
+  const d=droneAt(tch.clientX,tch.clientY);
+  if(d){
+    explode(d);
+    const i=drones.indexOf(d);
+    if(i>-1)drones.splice(i,1);
+    setTimeout(()=>drones.push(mkDrone(true)),900+Math.random()*1400);
+  }
+},{passive:true});
+
+/* ── CLOCK ── */
+const ck=document.getElementById('tkClock');
+function clock(){
+  const n=new Date(Date.now()+(330+new Date().getTimezoneOffset())*60000);
+  ck.textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0');
+}
+clock();setInterval(clock,1000);
+
+/* ── REVEALS ── */
+const ob=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('v');ob.unobserve(e.target)}}),{threshold:0.12});
+document.querySelectorAll('.r').forEach(el=>ob.observe(el));
+
+/* mission em highlight */
+const em=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){
+  document.querySelectorAll('.big em').forEach((x,i)=>setTimeout(()=>x.classList.add('lit'),500+i*400));
+  em.disconnect()}}),{threshold:0.5});
+const bigEl=document.querySelector('.big');if(bigEl)em.observe(bigEl);
+
+/* ── NAV SCROLL ── */
+addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scr',scrollY>60),{passive:true});
 </script>
 </body>
 </html>
